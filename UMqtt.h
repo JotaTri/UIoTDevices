@@ -15,7 +15,7 @@ class UMqtt : public BaseProtocol{
         bool register_data(char *data);
         char* add_mac_chipset(char *data);
         char *json_to_char(JsonObject&);
-        bool publish(const char[],char*);
+        bool publish(const char[], char*);
 
     private:
         PubSubClient mqtt_client;

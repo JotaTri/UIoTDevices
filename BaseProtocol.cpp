@@ -75,6 +75,56 @@ bool BaseProtocol::register_all(Service service, char *data){
 	//return this->register_device() && this->register_service(service) && this->register_data(data);
 }
 
+char *BaseProtocol::make_client_data(){
+  Serial.println("Registering Device");
+  StaticJsonBuffer<200> jsonBuffer;
+  JsonObject& root = jsonBuffer.createObject();
+  // Serial.print("Name: ");
+  // Serial.println(this->name);
+  // Serial.print("Chipset: ");
+  // Serial.println(this->chipset[0]);
+  // Serial.print("Mac: ");
+  // Serial.println(this->mac[0]);
+  // Serial.print("serial: ");
+  // Serial.println(this->serial);
+  // Serial.print("Processor: ");
+  // Serial.println(this->processor);
+  // Serial.print("Channel: ");
+  // Serial.println(this->channel);
+
+  String p;
+  root["name"] = this->name.c_str();
+  //  root.prettyPrintTo(p);
+  //  Serial.println(p);
+        // root["chipset"] = this->chipset;
+        // root["mac"] = this->mac;
+  root["serial"] = this->serial.c_str();
+  root["processor"] = this->processor;
+  root["channel"] = this->channel;
+   char *c = new char[root.measureLength() + 1];
+   // char c [200];
+  root.printTo((char*)c, root.measureLength() + 1);
+  Serial.println("auiiiiii");
+  Serial.println(c);
+  Serial.println("qqqqqqq");
+  return (c);
+  //Serial.println(p);
+  // char *c = new char[p.length() + 1];
+  // Serial.print("Size: ");
+  // Serial.println(p.length() + 1);
+  // strcpy(c, p.c_str());
+  // Serial.println(c);
+  // data = c;
+  // return(c);
+}
+
+char *BaseProtocol::make_service_data(Service s){
+  return (char*)"asdf";
+}
+
+char *BaseProtocol::make_raw_data(Service s, char *data){
+  return (char*)"asdf";
+}
 bool BaseProtocol::register_service(Service service){
   return false;
 }
@@ -84,4 +134,3 @@ bool BaseProtocol::register_device(){
 bool BaseProtocol::register_data(char* data){
   return false;
 }
-
