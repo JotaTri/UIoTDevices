@@ -18,12 +18,22 @@ bool UHttp::register_device(){
   data = this->make_client_data();
   this->http.begin(this->server + "/Device");
   this->http.addHeader("Content-Type", "application/json");
-  this->http.POST(data);
+  Serial.println(this->http.POST(data));
   // data = "oicara{'tudo': 1}";
   // this->publish("Register/Device", data);
+  this->http.end();
   return false;
 }
-bool UHttp::register_service(Service){
+bool UHttp::register_service(Service s){
+  char *service;
+  service = this->make_service_data(s);
+
+  this->http.begin(this->server + "/Service");
+  this->http.addHeader("Content-Type", "application/json");
+  Serial.println(service);
+  Serial.println(this->http.POST(service));
+
+  this->http.end();
   return false;
 }
 bool UHttp::register_data(char *data){

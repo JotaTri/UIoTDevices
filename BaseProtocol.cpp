@@ -43,34 +43,53 @@ void BaseProtocol::device_identificator(){
 //      Serial.println(bytes[i]);
    }
   }
-  this->mac[4] = bytes[0];
-  this->mac[5] = bytes[1];
+  this->mac_byte[4] = bytes[0];
+  this->mac_byte[5] = bytes[1];
+
   for (int i = 0; i < 6; i++){
-    this->chipset[i] = bytes[i+2];
+    this->chipset_byte[i] = bytes[i+2];
   }
 
+  for(int i = 0; i < 6; i++){
+    byte b = this->chipset_byte[i];
+    this->chipset += "0x";
+    this->chipset += this->nibble_to_char((b & 0xF0)>>4);
+    this->chipset += this->nibble_to_char(b & 0xF);
+    this->chipset += " ";
+  }
+
+  for(int i = 0; i < 6; i++){
+    byte b = this->mac_byte[i];
+    this->mac += "0x";
+    this->mac += this->nibble_to_char((b & 0xF0)>>4);
+    this->mac += this->nibble_to_char(b & 0xF);
+    this->mac += " ";
+  }
   Serial.print("MAC: ");
-  for (int i = 0; i< 6; i++){
-    Serial.print(this->mac[i]);
-    Serial.print(", ");
-  }
-  Serial.println("");
-  Serial.print("CHIPSET: ");
-  for (int i = 0; i< 6; i++){
-    Serial.print(this->chipset[i]);
-    Serial.print(", ");
-  }
+  Serial.println(this->mac);
+  // for (int i = 0; i< 6; i++){
+  //   Serial.print(this->mac[i]);
+  //   Serial.print(", ");
+  // }
 
-  Serial.println("");
+  Serial.print("CHIPSET: ");
+  Serial.println(this->chipset);
+  // for (int i = 0; i< 6; i++){
+  //   Serial.print(this->chipset[i]);
+  //   Serial.print(", ");
+  // }
+
+  // Serial.println("");
 
 }
 
-Service BaseProtocol::create_service(int number, const char *name){
-  return Service(number, name);
+Service BaseProtocol::create_service(int number, const char *name, String unit, bool numeric, String parameter){
+  return Service(number, name, unit, numeric, parameter);
 }
 
 bool BaseProtocol::register_all(Service service, char *data){
 	this->register_device();
+  this->register_service(service);
 	return false;
 	//return this->register_device() && this->register_service(service) && this->register_data(data);
 }
@@ -82,9 +101,9 @@ char *BaseProtocol::make_client_data(){
   // Serial.print("Name: ");
   // Serial.println(this->name);
   // Serial.print("Chipset: ");
-  // Serial.println(this->chipset[0]);
+  // Serial.println(this->chipset);
   // Serial.print("Mac: ");
-  // Serial.println(this->mac[0]);
+  // Serial.println(this->mac);
   // Serial.print("serial: ");
   // Serial.println(this->serial);
   // Serial.print("Processor: ");
@@ -94,37 +113,46 @@ char *BaseProtocol::make_client_data(){
 
   String p;
   root["name"] = this->name.c_str();
-  //  root.prettyPrintTo(p);
-  //  Serial.println(p);
-        // root["chipset"] = this->chipset;
-        // root["mac"] = this->mac;
+  root["chipset"] = this->chipset;
+  root["mac"] = this->mac;
   root["serial"] = this->serial.c_str();
   root["processor"] = this->processor;
   root["channel"] = this->channel;
-   char *c = new char[root.measureLength() + 1];
-   // char c [200];
+  char *c = new char[root.measureLength() + 1];
   root.printTo((char*)c, root.measureLength() + 1);
   Serial.println("auiiiiii");
   Serial.println(c);
   Serial.println("qqqqqqq");
   return (c);
-  //Serial.println(p);
-  // char *c = new char[p.length() + 1];
-  // Serial.print("Size: ");
-  // Serial.println(p.length() + 1);
-  // strcpy(c, p.c_str());
-  // Serial.println(c);
-  // data = c;
-  // return(c);
 }
 
-char *BaseProtocol::make_service_data(Service s){
-  return (char*)"asdf";
+
+char *BaseProtocol::make_service_data(Service service){
+  Serial.println("Registering Service");
+  StaticJsonBuffer<200> jsonBuffer;
+  JsonObject& root = jsonBuffer.createObject();
+
+  // root["number"] = service.number;
+  root["chipset"] = this->chipset;
+  root["mac"] = this->mac;
+  root["name"] = service.name;
+  root["parameter"] = service.parameter;
+  root["unit"] = service.unit;
+  // root["numeric"] = service.numeric;
+
+  char *c = new char[root.measureLength() + 1];
+  root.printTo((char*)c, root.measureLength() + 1);
+  return(c);
 }
 
 char *BaseProtocol::make_raw_data(Service s, char *data){
   return (char*)"asdf";
 }
+
+char BaseProtocol::nibble_to_char(int nibble){
+  return nibble + 48 + 7*(nibble > 9);
+}
+
 bool BaseProtocol::register_service(Service service){
   return false;
 }

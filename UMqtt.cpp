@@ -4,7 +4,7 @@ UMqtt::UMqtt(Client& client, IPAddress server) {
   this->device_identificator();
 
  Serial.println("Getting IP Address");
- Ethernet.begin(this->mac);
+ Ethernet.begin(this->mac_byte);
  //byte m[] = { 0x9A, 'I', 'O', 'T', 0xFB, 0x06 };
  //Ethernet.begin(m);
  Serial.print ("My IP address: ");

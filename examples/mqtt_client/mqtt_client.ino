@@ -31,11 +31,11 @@ IPAddress server(192, 168, 0, 108);
 
 
 void setup() {
-  
+
   // Communication between user and Arduino via Serial:
   Serial.begin(9600);
-  
-  
+
+
   // Start the Ethernet connection:
 //  Serial.println("Getting IP Address");
 //  Ethernet.begin(mac);
@@ -58,10 +58,10 @@ void setup() {
 
   //Class-made Client
   UMqtt class_client(ethernet_client, server);
-  Service service1 = class_client.create_service(1, "getTemp");
+  Service service1 = cliente.create_service(1, "getTemp", "°C", true, "Temperatura");
   class_client.send_data(service1, (char*)"56");
 
-  
+
 //  Serial.println("Payload: ");
 //  Serial.println(jsonChar);
 
@@ -69,7 +69,7 @@ void setup() {
 //  PubSubClient mqtt_client;
 //  mqtt_client.setClient(ethernet_client);
 //  mqtt_client.setServer(server, 1883);
-//  
+//
 //  connect_to_broker(mqtt_client, "RawPubSub");
 //
 //  Serial.println("Publishing Manufactured PubSubClient from Client RawPubSub");
@@ -77,14 +77,14 @@ void setup() {
 //  mqtt_client.disconnect();
 
 
-  
-  
-  
+
+
+
   //PubSub Complete Client
 //  PubSubClient cliente(server, 1883, ethernet_client);
-//  
+//
 //  connect_to_broker(cliente, "PubSubComplete");
-//  
+//
 //  cliente.publish("teste/teste1/", jsonChar);
 //  cliente.disconnect();
 }
@@ -139,4 +139,3 @@ String payload_creator(){
 
   return jsonChar;
 }
-
