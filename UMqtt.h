@@ -1,5 +1,7 @@
 #ifndef UMQTT_H
 #define UMQTT_H
+#define MQTT_MAX_PACKET_SIZE 140
+
 
 #include <PubSubClient.h>
 #include "BaseProtocol.h"
@@ -12,7 +14,7 @@ class UMqtt : public BaseProtocol{
         UMqtt(Client&, IPAddress);
         bool register_device();
         bool register_service(Service);
-        bool register_data(char *data);
+        bool register_data(Service, char*, int);
         char* add_mac_chipset(char *data);
         char *json_to_char(JsonObject&);
         bool publish(const char[], char*);

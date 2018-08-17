@@ -23,63 +23,37 @@ UMqtt::UMqtt(Client& client, IPAddress server) {
 }
 
 bool UMqtt::register_device(){
-    char *data;
-    data = this->make_client_data();
-    // data = "oicara{'tudo': 1}";
-    this->publish("Register/Device", data);
- // root.printTo((char*)c, root.measureLength() + 1);
- // Serial.println(c);
- //  this->json_to_char(root);
- //  Serial.println(this->json_to_char(root));
- // return this->publish("Register/Device", this->json_to_char(root));
-  return false;
+  char *data;
+  data = this->make_client_data();
+  // Serial.println(data);
+  return this->publish("C", data);
 }
-
 
 bool UMqtt::register_service(Service service){
-  StaticJsonBuffer<200> jsonBuffer;
-  JsonObject& root = jsonBuffer.createObject();
-  root["tags"] = service.tags;
-  root["number"] = service.number;
-  root["chipset"] = this->chipset;
-  root["mac"] = this->mac;
-  root["name"] = service.name;
-  root["unit"] = service.unit;
-  root["numeric"] = service.numeric;
+  char *data;
+  data = this->make_service_data(service);
 
-  return this->publish("Register/Service", json_to_char(root));
-
-  return true;
+  return this->publish("S", data);
 }
-bool UMqtt::register_data(char  *data){
-	data = this->add_mac_chipset(data);
-	return this->publish("Data/", data);
+
+bool UMqtt::register_data(Service service, char  *data, int sensitive){
+  char *full_data;
+  full_data = this->make_raw_data(service, data, sensitive);
+
+  return this->publish("D", full_data);
 }
 
 bool UMqtt::publish(const char *topic, char *data) {
-     // char *c = new char[data.length() + 1];
-     // char c[15];
-     // strcpy(c, data.c_str());
-     // data.toCharArray(c, data.length() + 1);
-    Serial.print("Sending Data: ");
-    Serial.println(data);
-    this->mqtt_client.connect("ClassClient");
-
-    Serial.println(this->mqtt_client.publish(topic, data));
+    this->mqtt_client.connect((char*)this->mac.c_str());
+    if (!this->mqtt_client.connected()){
+      Serial.println("Could not connect to broker!");
+      return false;
+    }
+    Serial.println(MQTT_MAX_PACKET_SIZE);
+    bool isSent = this->mqtt_client.publish(topic, data);
     this->mqtt_client.disconnect();
-    return true;
-    // while(!this->mqtt_client.connected()){
-    //   Serial.println("Connecting...");
-    //   this->mqtt_client.connect("ArduinoClient");
-    //
-    //   if (this->mqtt_client.connected()){
-    //     Serial.println("Connected");
-		// 	}
-    //   else{
-		// 		Serial.println("Not Connected");
-		// 		return false;
-		// 	}
-  	// }
+    Serial.println(isSent);
+    return isSent;
 }
 
 char* UMqtt::add_mac_chipset(char *data){
