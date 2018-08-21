@@ -1,17 +1,35 @@
 #include "BaseProtocol.h"
 
+Service BaseProtocol::create_service(int number, const char *name, String unit, bool numeric, String parameter){
+  return Service(number, name, unit, numeric, parameter);
+}
+
 bool BaseProtocol::send_data(Service service, char *data, int sensitive=0) {
   // Serial.println("Send Data");
   // this->register_device();
-	(!this->DEVICE_REGISTERED)? this->register_all(service, data, sensitive) : this->register_data(service, data, sensitive);
-  this->DEVICE_REGISTERED = true;
+  // this->register_service(service);
+	this->DEVICE_REGISTERED = (!this->DEVICE_REGISTERED)? this->register_all(service, data, sensitive) : this->register_data(service, data, sensitive);
+  return this->DEVICE_REGISTERED;
 }
+
+// void BaseProtocol::init(){
+//   this->device_identificator();
+//
+//   Ethernet.begin(this->mac_byte);
+//
+//   Serial.print ("My IP address: ");
+//   for (byte thisByte = 0; thisByte < 4; thisByte++) {
+//     Serial.print (Ethernet.localIP ()[thisByte], DEC);
+//     Serial.print (".");
+//   }
+//   Serial.println("");
+// }
 
 void BaseProtocol::device_identificator(){
   int address = 0;
   int bytes[8];
-  Serial.println(EEPROM.read(0));
-  Serial.println(EEPROM.read(1));
+  // Serial.println(EEPROM.read(0));
+  // Serial.println(EEPROM.read(1));
   if (EEPROM.read(0) != 'U' || EEPROM.read(1) != 'T'){
     EEPROM.write(0, 'U');
     EEPROM.write(1, 'T');
@@ -51,16 +69,12 @@ void BaseProtocol::device_identificator(){
     this->mac += ":";
   }
   this->mac.remove(this->mac.length()-1,1);
-  Serial.print("MAC: ");
-  Serial.println(this->mac);
+  // Serial.print("MAC: ");
+  // Serial.println(this->mac);
+  //
+  // Serial.print("CHIPSET: ");
+  // Serial.println(this->chipset);
 
-  Serial.print("CHIPSET: ");
-  Serial.println(this->chipset);
-
-}
-
-Service BaseProtocol::create_service(int number, const char *name, String unit, bool numeric, String parameter){
-  return Service(number, name, unit, numeric, parameter);
 }
 
 bool BaseProtocol::register_all(Service service, char *data, int sensitive){
@@ -68,7 +82,7 @@ bool BaseProtocol::register_all(Service service, char *data, int sensitive){
 }
 
 char *BaseProtocol::make_client_data(){
-  // Serial.println("Registering Device");
+  Serial.println("Registering Device");
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();
 
@@ -88,20 +102,42 @@ char *BaseProtocol::make_client_data(){
 
 char *BaseProtocol::make_service_data(Service service){
   Serial.println("Registering Service");
-  StaticJsonBuffer<200> jsonBuffer;
-  JsonObject& root = jsonBuffer.createObject();
-
-  root["number"] = service.number;
-  root["chipset"] = this->chipset;
-  root["mac"] = this->mac;
-  root["name"] = service.name;
-  root["parameter"] = service.parameter;
-  root["unit"] = service.unit;
-  root["numeric"] = service.numeric;
-
-  char *c = new char[root.measureLength() + 1];
-  root.printTo((char*)c, root.measureLength() + 1);
-  return(c);
+  // delay(1000);
+  // StaticJsonBuffer<200> jsonBuffer;
+  // JsonObject& root = jsonBuffer.createObject();
+  //
+  // root["number"] = service.number;
+  // root.printTo(Serial);
+  // Serial.println("");
+  //
+  // root["chipset"] = this->chipset;
+  // root.printTo(Serial);
+  // Serial.println("");
+  //
+  // root["mac"] = this->mac;
+  // root.printTo(Serial);
+  // Serial.println("");
+  //
+  // root["name"] = service.name;
+  // root.printTo(Serial);
+  // Serial.println("");
+  //
+  // root["parameter"] = service.parameter;
+  // root.printTo(Serial);
+  // Serial.println("");
+  //
+  // Serial.println(service.unit);
+  // root["unit"] = service.unit;
+  // root.printTo(Serial);
+  // Serial.println("");
+  //
+  // root["numeric"] = service.numeric;
+  //
+  // char *c = new char[root.measureLength() + 1];
+  // root.printTo((char*)c, root.measureLength() + 1);
+  // root.printTo(Serial);
+  // return(c);
+  return((char *)"\"number\" : 1, \"chipset\" : \"AE:08:20:24:F9:0E\", \"mac\" : \"9A:49:4F:54:F0:F8\", \"name\" : \"getTemp\", \"parameter\" : \"Temperatura\", \"unit\" : \"*C\", \"numeric\" : 1 }");
 }
 
 char *BaseProtocol::make_raw_data(Service s, char *data, int sensitive){

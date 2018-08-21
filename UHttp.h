@@ -11,7 +11,9 @@
 
 class UHttp : public BaseProtocol{
     public:
+        UHttp();
         UHttp(const char*);
+        void init();
         void set_server(const char*);
         bool register_device();
         bool register_service(Service);
@@ -21,6 +23,7 @@ class UHttp : public BaseProtocol{
     private:
         const char* server;
         EthernetClient eth_client;
+
 
 
 };
