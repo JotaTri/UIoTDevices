@@ -102,12 +102,12 @@ bool UHttp::POST(const char* endpoint, char* post_data){
     this->eth_client.flush();
     this->eth_client.stop();
     Serial.println(this->eth_client.read());
-
-    while(this->eth_client.connected()){
-      while(this->eth_client.available()){
-        Serial.write(this->eth_client.read());
-      }
-    }
+    // 
+    // while(this->eth_client.connected()){
+    //   while(this->eth_client.available()){
+    //     Serial.write(this->eth_client.read());
+    //   }
+    // }
 
     Serial.println("Posted sepa");
     delay(100);

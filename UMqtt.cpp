@@ -62,7 +62,7 @@ char* UMqtt::add_mac_chipset(char *data){
 
 char* UMqtt::json_to_char(JsonObject& root){
   String payload;
-  root.prettyPrintTo(payload);
+  // root.prettyPrintTo(payload);
   Serial.println("Payload:");
 //  Serial.println(payload);
 

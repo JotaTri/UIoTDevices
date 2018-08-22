@@ -8,7 +8,7 @@
 
 class Service {
   public:
-    Service (int number, const char *name, String unit, short int numeric, String parameter){
+    Service (int number, const char *name, String unit, int numeric, String parameter){
       this->number = number;
       this->name = name;
       this->unit = unit;
@@ -20,7 +20,7 @@ class Service {
     const char * name;
     String *tags;
     String unit = "";
-    short int numeric;
+    int numeric;
     String parameter = "";
   };
 
@@ -40,7 +40,7 @@ class BaseProtocol {
         char *make_client_data();
         char *make_service_data(Service);
         char *make_raw_data(Service, char*, int);
-
+        char *append_json(char*, const char*, const char*);
     private:
         bool DEVICE_REGISTERED = false;
 
