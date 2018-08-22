@@ -82,33 +82,23 @@ bool BaseProtocol::register_all(Service service, char *data, int sensitive){
 }
 
 
-char *BaseProtocol::make_client_data(){
+char *BaseProtocol::make_client_data(char* json){
   Serial.println("Registering Device");
-  // StaticJsonBuffer<200> jsonBuffer;
-  // JsonObject& root = jsonBuffer.createObject();
-  //
-  // String p;
-  // root["name"] = (char*)this->name.c_str();
-  // root["chipset"] = this->chipset;
-  // root["mac"] = this->mac;
-  // root["serial"] = (char*)this->serial.c_str();
-  // root["processor"] = this->processor;
-  // root["channel"] = this->channel;
-  //
-  // char *c = new char[root.measureLength() + 1];
-  // root.printTo(c, root.measureLength() + 1);
-  char* json = (char*)malloc(2*sizeof(char));
+
+  Serial.println(strlen(json));
+  json = (char*)malloc(2*sizeof(char));
   json[0] = '{';
-  json  = this->append_json(json, "name", this->name.c_str());
-  Serial.println(json);
+  json[1] = '\0';
+  json = this->append_json(json, "name", this->name.c_str());
+  // Serial.println(json);
   json = this->append_json(json, "chipset", this->chipset.c_str());
-  Serial.println(json);
+  // Serial.println(json);
   json = this->append_json(json, "mac", this->mac.c_str());
-  Serial.println(json);
+  // Serial.println(json);
   json = this->append_json(json, "serial", this->serial.c_str());
-  Serial.println(json);
+  // Serial.println(json);
   json = this->append_json(json, "processor", this->processor.c_str());
-  Serial.println(json);
+  // Serial.println(json);
   json = this->append_json(json, "channel", this->channel.c_str());
   // json = (char*) realloc (json, (strlen(json) + 2) * sizeof(char));
   json[strlen(json)-1] = '}';
@@ -117,59 +107,19 @@ char *BaseProtocol::make_client_data(){
 }
 
 
-char *BaseProtocol::make_service_data(Service service){
+char *BaseProtocol::make_service_data(Service service, char* json){
   Serial.println("Registering Service");
-  // delay(1000);
-  // StaticJsonBuffer<200> jsonBuffer;
-  // JsonObject& root = jsonBuffer.createObject();
-  //
-  // root["number"] = String(service.number);
-  // root.printTo(Serial);
-  // Serial.println("");
-  //
-  // root["chipset"] = this->chipset;
-  // root.printTo(Serial);
-  // Serial.println("");
-  //
-  // root["mac"] = this->mac;
-  // root.printTo(Serial);
-  // Serial.println("");
-  //
-  // root["name"] = service.name;
-  // root.printTo(Serial);
-  // Serial.println("");
-  //
-  // root["parameter"] = service.parameter;
-  // root.printTo(Serial);
-  // Serial.println("");
-  //
-  // // Serial.println(service.unit);
-  // root["unit"] = service.unit;
-  // root.printTo(Serial);
-  // Serial.println("");
-  // // root["numeric"] = String(service.numeric);
-  // // delay(1000);
-  // // root.printTo(Serial);
-  // char *c = new char[root.measureLength() + 1];
-  // Serial.println("ue ?");
-  // delay(1000);
-  // root.printTo((char*)c, root.measureLength() + 1);
-  // Serial.println("ue2 ?");
-  // delay(1000);
-  // root.printTo(Serial);
-  // return(c);
-  char* json = (char*)malloc(2*sizeof(char));
+
+  Serial.println(strlen(json));
+  json = (char*)malloc(2*sizeof(char));
   json[0] = '{';
+  json[1] = '\0';
   json  = this->append_json(json, "name", service.name);
-  Serial.println(json);
   json = this->append_json(json, "chipset", this->chipset.c_str());
-  Serial.println(json);
   json = this->append_json(json, "mac", this->mac.c_str());
-  Serial.println(json);
   json = this->append_json(json, "parameter", service.parameter.c_str());
-  Serial.println(json);
+  json = this->append_json(json, "number", String(service.number).c_str());
   json = this->append_json(json, "unit", service.unit.c_str());
-  Serial.println(json);
   json = this->append_json(json, "numeric", String(service.numeric).c_str());
   // json = (char*) realloc (json, (strlen(json) + 2) * sizeof(char));
   json[strlen(json)-1] = '}';
@@ -178,29 +128,39 @@ char *BaseProtocol::make_service_data(Service service){
   // return((char *)"{\"number\" : 1, \"chipset\" : \"AE:08:20:24:F9:0E\", \"mac\" : \"9A:49:4F:54:F0:F8\", \"name\" : \"getTemp\", \"parameter\" : \"Temperatura\", \"unit\" : \"*C\", \"numeric\" : 1 }");
 }
 
-char *BaseProtocol::make_raw_data(Service s, char *data, int sensitive){
+char *BaseProtocol::make_raw_data(Service s, char *data, int sensitive, char* json){
   Serial.println("Raw Data");
-  // StaticJsonBuffer<200> jsonBuffer;
-  // JsonObject& root = jsonBuffer.createObject();
-  //
-  // root["chipset"] = this->chipset;
-  // root["mac"] = this->mac;
-  // root["sensitive"] = String(sensitive);
-  // root["serviceNumber"] = String(s.number);
-  // root["values"] = data;
-  //
-  // char *c = new char[root.measureLength() + 1];
-  // root.printTo((char*)c, root.measureLength() + 1);
-
-  return((char *)"{\"number\" : 1, \"chipset\" : \"AE:08:20:24:F9:0E\", \"mac\" : \"9A:49:4F:54:F0:F8\", \"name\" : \"getTemp\", \"parameter\" : \"Temperatura\", \"unit\" : \"*C\", \"numeric\" : 1 }");
+  Serial.println(strlen(json));
+  json = (char*)malloc(2*sizeof(char));
+  json[0] = '{';
+  json[1] = '\0';
+  json = this->append_json(json, "chipset", this->chipset.c_str());
+  json = this->append_json(json, "mac", this->mac.c_str());
+  json = this->append_json(json, "sensitive", String(sensitive).c_str());
+  json = this->append_json(json, "serviceNumber", String(s.number).c_str());
+  json = this->append_json(json, "values", data);
+  json[strlen(json)-1] = '}';
+  Serial.println(json);
+  return json;
+  //return((char *)"{\"number\" : 1, \"chipset\" : \"AE:08:20:24:F9:0E\", \"mac\" : \"9A:49:4F:54:F0:F8\", \"name\" : \"getTemp\", \"parameter\" : \"Temperatura\", \"unit\" : \"*C\", \"numeric\" : 1 }");
 }
+
+
 char* BaseProtocol::append_json(char *json, const char* key, const char* value){
-  json = (char*) realloc (json, (strlen(key) + strlen(value) + 5 + strlen(json)) * sizeof(char)); // 5 because "" and :
+  // Serial.print("key:");
+  // Serial.println(strlen(key));
+  // Serial.print("value:");
+  // Serial.println(strlen(value));
+  // Serial.print("json:");
+  Serial.println(strlen(json));
+  // Serial.println(json);
+  json = (char*) realloc (json, (strlen(key) + strlen(value) + 7 + strlen(json)) * sizeof(char)); // 6 because "" and : and ,
   strcat(json, "\"");
   strcat(json, key);
   strcat(json, "\":\"");
   strcat(json, value);
   strcat(json, "\",");
+  json[strlen(json)] = '\0';
   return json;
 }
 char BaseProtocol::nibble_to_char(int nibble){

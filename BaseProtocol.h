@@ -37,9 +37,9 @@ class BaseProtocol {
         bool send_data(Service , char*, int);
         Service create_service(int , const char *, String, bool, String);
         char nibble_to_char(int);
-        char *make_client_data();
-        char *make_service_data(Service);
-        char *make_raw_data(Service, char*, int);
+        char *make_client_data(char*);
+        char *make_service_data(Service, char*);
+        char *make_raw_data(Service, char*, int, char*);
         char *append_json(char*, const char*, const char*);
     private:
         bool DEVICE_REGISTERED = false;

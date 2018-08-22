@@ -47,24 +47,37 @@ void UHttp::set_server(const char *server){
 }
 
 bool UHttp::register_device(){
-  char *data;
-  data = this->make_client_data();
-
-  return this->POST("/client", data);
+  char *data = NULL;
+  data = this->make_client_data(data);
+  Serial.println(strlen(data));
+  bool result = this->POST("/client", data);
+  for(int i = 0; i < strlen(data); i++)
+    data[i] = '\0';
+  free(data);
+  data = NULL;
+  return result;
 }
 
 bool UHttp::register_service(Service s){
-  char *data;
-  data = this->make_service_data(s);
+  char *data = NULL;
+  data = this->make_service_data(s, data);
 
-  return this->POST("/service", data);
+  Serial.println(strlen(data));
+  bool result = this->POST("/service", data);
+  free(data);
+  data = NULL;
+  return result;
 }
 
 bool UHttp::register_data(Service s, char* value, int sensitive){
-  char *data;
-  data = this->make_raw_data(s, value, sensitive);
+  char *data = NULL;
+  data = this->make_raw_data(s, value, sensitive, data);
 
-  return this->POST("/data", data);
+  Serial.println(strlen(data));
+  bool result = this->POST("/data", data);
+  free(data);
+  data = NULL;
+  return result;
 }
 
 bool UHttp::POST(const char* endpoint, char* post_data){
@@ -75,7 +88,6 @@ bool UHttp::POST(const char* endpoint, char* post_data){
   Serial.print(":");
   Serial.println(HTTP_PORT);
   if(this->eth_client.connect(this->server,HTTP_PORT)){
-    Serial.println("H0");
     this->eth_client.print("POST ");
     this->eth_client.print(endpoint);
     this->eth_client.println(" HTTP/1.1");
@@ -102,7 +114,7 @@ bool UHttp::POST(const char* endpoint, char* post_data){
     this->eth_client.flush();
     this->eth_client.stop();
     Serial.println(this->eth_client.read());
-    // 
+    //
     // while(this->eth_client.connected()){
     //   while(this->eth_client.available()){
     //     Serial.write(this->eth_client.read());
@@ -111,12 +123,16 @@ bool UHttp::POST(const char* endpoint, char* post_data){
 
     Serial.println("Posted sepa");
     delay(100);
+    // Serial.print("post_data: ");
+    // Serial.println(post_data);
     return true;
   }
   else{
     Serial.print("Connection to server '");
     Serial.print(this->server);
     Serial.println("' failed");
+    // Serial.print("post_data: ");
+    // Serial.println(post_data);
     return false;
   }
 }
