@@ -28,13 +28,13 @@ class Service {
 class BaseProtocol {
     public:
         bool send_data();
-        bool register_all(Service, char*, int);
         void device_identificator();
+        bool register_all(Service, char*, int);
         virtual bool register_device() = 0;
         virtual bool register_service(Service)= 0;
         virtual bool register_data(Service, char*, int)= 0;
-        // void init();
-        bool send_data(Service , char*, int);
+        bool send_data(Service , float*, int, int);
+        char* float_to_char(float*, int);
         Service create_service(int , const char *, String, bool, String);
         char nibble_to_char(int);
         char *make_client_data(char*);
