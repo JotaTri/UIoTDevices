@@ -11,24 +11,10 @@ bool BaseProtocol::send_data(Service service, float *data, int array_size, int s
   return this->DEVICE_REGISTERED;
 }
 
-// void BaseProtocol::init(){
-//   this->device_identificator();
-//
-//   Ethernet.begin(this->mac_byte);
-//
-//   Serial.print ("My IP address: ");;
-//   for (byte thisByte = 0; thisByte < 4; thisByte++) {
-//     Serial.print (Ethernet.localIP ()[thisByte], DEC);
-//     Serial.print (".");
-//   }
-//   Serial.println("");
-// }
-
 void BaseProtocol::device_identificator(){
   int address = 0;
   int bytes[8];
-  // Serial.println(EEPROM.read(0));
-  // Serial.println(EEPROM.read(1));
+  
   if (EEPROM.read(0) != 'U' || EEPROM.read(1) != 'T'){
     EEPROM.write(0, 'U');
     EEPROM.write(1, 'T');
@@ -159,24 +145,23 @@ char* BaseProtocol::float_to_char(float* float_array, int array_size){
     // Serial.println(dtostrf(float_array[i], 10, 3, b));
     b = String(float_array[i]);
     contador += b.length() + 1;
-    Serial.print("b:");
-    Serial.println(b);
-    Serial.print("contador: ");
-    Serial.println(contador);
-    Serial.print("values: ");
-    Serial.println(values);
+    // Serial.print("b:");
+    // Serial.println(b);
+    // Serial.print("contador: ");
+    // Serial.println(contador);
+    // Serial.print("values: ");
+    // Serial.println(values);
     values = (char*) realloc (values, (contador) * sizeof(char));
     strcat(values, b.c_str());
     strcat(values, ",");
-    Serial.print("values: ");
-    Serial.println(values);
+    // Serial.print("values: ");
+    // Serial.println(values);
   }
-  Serial.println("FIM DO FOR\n");;
   values[contador-2] = '\0';
 
   strcat(values, "]");
-  Serial.print("values: ");
-  Serial.println(values);
+  // Serial.print("values: ");
+  // Serial.println(values);
   // cout << values;
 
   return values;

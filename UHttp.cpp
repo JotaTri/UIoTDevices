@@ -1,16 +1,6 @@
 #include "UHttp.h"
 
-UHttp::UHttp(){
-  // this->device_identificator();
-  // Ethernet.begin(this->mac_byte);
-
-  // Serial.print ("My IP address: ");
-  // for (byte thisByte = 0; thisByte < 4; thisByte++) {
-  //   Serial.print (Ethernet.localIP ()[thisByte], DEC);
-  //   Serial.print (".");
-  // }
-  // Serial.println("");
-}
+UHttp::UHttp(){}
 
 
 UHttp::UHttp(const char *server){
