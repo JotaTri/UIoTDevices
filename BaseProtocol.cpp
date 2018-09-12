@@ -11,10 +11,21 @@ bool BaseProtocol::send_data(Service service, float *data, int array_size, int s
   return this->DEVICE_REGISTERED;
 }
 
+bool BaseProtocol::send_data(Service service, char *char_data, int sensitive=0) {
+  // char * char_data = float_to_char(data, array_size);
+  // char *values;
+  // values = (char*)malloc(2*sizeof(char));
+  // values[0] = '[';
+  // values[1] = '\0';
+	this->DEVICE_REGISTERED = (!this->DEVICE_REGISTERED)? this->register_all(service, char_data, sensitive) : this->register_data(service, char_data, sensitive);
+  // free(char_data);
+  return this->DEVICE_REGISTERED;
+}
+
 void BaseProtocol::device_identificator(){
   int address = 0;
   int bytes[8];
-  
+
   if (EEPROM.read(0) != 'U' || EEPROM.read(1) != 'T'){
     EEPROM.write(0, 'U');
     EEPROM.write(1, 'T');
@@ -68,9 +79,9 @@ bool BaseProtocol::register_all(Service service, char *data, int sensitive){
 
 
 char *BaseProtocol::make_client_data(char* json){
-  Serial.println("Registering Device");
+  // Serial.println("Registering Device");
 
-  Serial.println(strlen(json));
+  // Serial.println(strlen(json));
   json = (char*)malloc(2*sizeof(char));
   json[0] = '{';
   json[1] = '\0';
@@ -81,15 +92,15 @@ char *BaseProtocol::make_client_data(char* json){
   json = this->append_json(json, "processor", this->processor.c_str());
   json = this->append_json(json, "channel", this->channel.c_str());
   json[strlen(json)-1] = '}';
-  Serial.println(json);
+  // Serial.println(json);
   return json;
 }
 
 
 char *BaseProtocol::make_service_data(Service service, char* json){
-  Serial.println("Registering Service");
+  // Serial.println("Registering Service");
 
-  Serial.println(strlen(json));
+  // Serial.println(strlen(json));
   json = (char*)malloc(2*sizeof(char));
   json[0] = '{';
   json[1] = '\0';
@@ -101,13 +112,13 @@ char *BaseProtocol::make_service_data(Service service, char* json){
   json = this->append_json(json, "unit", service.unit.c_str());
   json = this->append_json(json, "numeric", String(service.numeric).c_str());
   json[strlen(json)-1] = '}';
-  Serial.println(json);
+  // Serial.println(json);
   return json;
 }
 
 char *BaseProtocol::make_raw_data(Service s, char *data, int sensitive, char* json){
-  Serial.println("Raw Data");
-  Serial.println(strlen(json));
+  // Serial.println("Raw Data");
+  // Serial.println(strlen(json));
   json = (char*)malloc(2*sizeof(char));
   json[0] = '{';
   json[1] = '\0';
@@ -117,13 +128,13 @@ char *BaseProtocol::make_raw_data(Service s, char *data, int sensitive, char* js
   json = this->append_json(json, "serviceNumber", String(s.number).c_str());
   json = this->append_json(json, "values", data);
   json[strlen(json)-1] = '}';
-  Serial.println(json);
+  // Serial.println(json);
   return json;
 }
 
 
 char* BaseProtocol::append_json(char *json, const char* key, const char* value){
-  Serial.println(strlen(json));
+  // Serial.println(strlen(json));
   json = (char*) realloc (json, (strlen(key) + strlen(value) + 7 + strlen(json)) * sizeof(char)); // 6 because "" and : and ,
   strcat(json, "\"");
   strcat(json, key);
@@ -151,7 +162,7 @@ char* BaseProtocol::float_to_char(float* float_array, int array_size){
     // Serial.println(contador);
     // Serial.print("values: ");
     // Serial.println(values);
-    values = (char*) realloc (values, (contador) * sizeof(char));
+    values = (char*) realloc (values, (contador ) * sizeof(char));
     strcat(values, b.c_str());
     strcat(values, ",");
     // Serial.print("values: ");

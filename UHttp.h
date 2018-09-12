@@ -22,6 +22,7 @@ class UHttp : public BaseProtocol{
 
     private:
         const char* server;
+    public:
         EthernetClient eth_client;
 
 
