@@ -1,7 +1,7 @@
 #include <UHttp.h>
 
 
-UHttp cliente;
+UHttp device;
 Service service1;
 int tam = 10;
 
@@ -9,14 +9,14 @@ void setup(){
   Serial.begin(9600);
   while (!Serial);
   delay(1000);
-  cliente.init();
-  cliente.set_server("172.16.9.69");
-  service1 = cliente.create_service(1, "getTemp", "*C", 1, "Temperatura");
+  device.init();
+  device.set_server("172.16.9.69");
+  service1 = device.create_service(1, "getTemp", "*C", 1, "Temperatura");
 }
 
 void loop(){
   float* ptr = gerador_array(tam);
-  cliente.send_data(service1, ptr , tam, 0);
+  device.send_data(service1, ptr , tam, 0);
   delay(5000);
   Serial.println("loop");
   free(ptr);
