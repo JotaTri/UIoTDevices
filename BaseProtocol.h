@@ -3,7 +3,6 @@
 
 #include <PubSubClient.h>
 #include <EEPROM.h>
-#include <ArduinoJson.h>
 #include <Ethernet.h>
 
 class Service {
@@ -48,10 +47,10 @@ class BaseProtocol {
     protected:
         byte mac_byte[6] = {0x9A, 'I', 'O', 'T', 0, 0};
         byte chipset_byte[6];
-        String name = "A";
-        String serial = "C";
-        String processor = "AP";
-        String channel = "E";
+        String name = "Arduino";
+        String serial = "CA124";
+        String processor = "ATMega";
+        String channel = "Ethernet";
         String chipset = "";
         String mac = "";
 };
