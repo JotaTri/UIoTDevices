@@ -18,7 +18,6 @@ void setup(){
   delay(1000);
 
   pinMode(light_sensor_pin, INPUT);      // sets the digital pin 13 as output
-
   device.init();
   temp_service = device.create_service(1, "getTemp", "*C", 1, "Temperature");
   hum_service = device.create_service(2, "getHum", "g/m^3(H20)/g/m^3(air)", 1, "Hummidity");
@@ -34,14 +33,14 @@ void loop(){
   float t = dht.readTemperature();
   if(!digitalRead(light_sensor_pin)){
     device.send_data(lum_service,"true",0);
-    Serial.println("Tem Luz");
+//    Serial.println("Tem Luz");
   }
 //  else{
 //    Serial.println("Não Tem Luz");
 //  }
   // testa se retorno é valido, caso contrário algo está errado.
   if (isnan(t) || isnan(h)){
-    Serial.println("Failed to read from DHT");
+//    Serial.println("Failed to read from DHT");
   }
   else
   {

@@ -5,6 +5,12 @@ USerial::USerial(){}
 
 void USerial::init(){
   this->device_identificator();
+  while(true){
+    while(!Serial.available());
+    if(Serial.readString() == "*WM: freeing allocated params!"){
+      break;
+    }
+  }
 }
 
 bool USerial::register_device(){
@@ -40,10 +46,10 @@ bool USerial::register_data(Service s, char* value, int sensitive){
 
 bool USerial::send(const char* DIE, char* send_data){
   Serial.println(DIE);
+  delay(1000);
   Serial.println(send_data);
   while(!Serial.available());
   String p = Serial.readString();
-  Serial.println(p);
   if( p == "1"){
     Serial.println("1");
     return true;
