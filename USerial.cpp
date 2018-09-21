@@ -1,16 +1,15 @@
-#include "UHttp.h"
+#include "USerial.h"
 
-UHttp::UHttp(){}
+USerial::USerial(){}
 
 
-void UHttp::init(){
+void USerial::init(){
   this->device_identificator();
 }
 
-bool UHttp::register_device(){
+bool USerial::register_device(){
   char *data = NULL;
   data = this->make_client_data(data);
-  // Serial.println(strlen(data));
   bool result = this->send("client", data);
   for(int i = 0; i < strlen(data); i++)
     data[i] = '\0';
@@ -19,7 +18,7 @@ bool UHttp::register_device(){
   return result;
 }
 
-bool UHttp::register_service(Service s){
+bool USerial::register_service(Service s){
   char *data = NULL;
   data = this->make_service_data(s, data);
 
@@ -29,7 +28,7 @@ bool UHttp::register_service(Service s){
   return result;
 }
 
-bool UHttp::register_data(Service s, char* value, int sensitive){
+bool USerial::register_data(Service s, char* value, int sensitive){
   char *data = NULL;
   data = this->make_raw_data(s, value, sensitive, data);
 
@@ -39,14 +38,18 @@ bool UHttp::register_data(Service s, char* value, int sensitive){
   return result;
 }
 
-bool UHttp::send(const char* DIE, char* send_data){
-  Serial.pritln(DIE);
+bool USerial::send(const char* DIE, char* send_data){
+  Serial.println(DIE);
   Serial.println(send_data);
   while(!Serial.available());
-  if(Serial.readString() == 1){
+  String p = Serial.readString();
+  Serial.println(p);
+  if( p == "1"){
+    Serial.println("1");
     return true;
   }
   else{
+    Serial.println("0");
     return false;
   }
 
