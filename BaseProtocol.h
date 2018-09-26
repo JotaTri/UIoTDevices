@@ -21,6 +21,7 @@ class Service {
     String unit = "";
     int numeric;
     String parameter = "";
+    bool registered = false;
   };
 
 
@@ -29,6 +30,7 @@ class BaseProtocol {
         bool send_data();
         void device_identificator();
         bool register_all(Service, char*, int);
+        bool BaseProtocol::register_service_data(Service, char*, int);
         virtual bool register_device() = 0;
         virtual bool register_service(Service)= 0;
         virtual bool register_data(Service, char*, int)= 0;
@@ -40,7 +42,7 @@ class BaseProtocol {
         char *make_client_data(char*);
         char *make_service_data(Service, char*);
         char *make_raw_data(Service, char*, int, char*);
-        char *append_json(char*, const char*, const char*);
+        char *append_json(char*, const char*, const char*, int);
     private:
         bool DEVICE_REGISTERED = false;
 

@@ -18,7 +18,6 @@ UHttp::UHttp(const char *server){
 }
 
 void UHttp::init(){
-  Serial.println("aqui");
   this->device_identificator();
   Ethernet.begin(this->mac_byte);
 
@@ -41,7 +40,7 @@ bool UHttp::register_device(){
   // Serial.println(strlen(data));
   bool result = this->POST("/client", data);
   for(int i = 0; i < strlen(data); i++)
-    data[i] = '\0';
+  data[i] = '\0';
   free(data);
   data = NULL;
   return result;
@@ -50,9 +49,10 @@ bool UHttp::register_device(){
 bool UHttp::register_service(Service s){
   char *data = NULL;
   data = this->make_service_data(s, data);
-
   // Serial.println(strlen(data));
   bool result = this->POST("/service", data);
+  for(int i = 0; i < strlen(data); i++)
+  data[i] = '\0';
   free(data);
   data = NULL;
   return result;
@@ -64,18 +64,14 @@ bool UHttp::register_data(Service s, char* value, int sensitive){
 
   // Serial.println(strlen(data));
   bool result = this->POST("/data", data);
+  for(int i = 0; i < strlen(data); i++)
+  data[i] = '\0';
   free(data);
   data = NULL;
   return result;
 }
 
 bool UHttp::POST(const char* endpoint, char* post_data){
-  // Serial.print("Attempting to post:");
-  // Serial.println(post_data);
-  // Serial.print("To ");
-  // Serial.print(this->server);
-  // Serial.print(":");
-  // Serial.println(HTTP_PORT);
   if(this->eth_client.connect(this->server,HTTP_PORT)){
     this->eth_client.print("POST ");
     this->eth_client.print(endpoint);
@@ -98,20 +94,25 @@ bool UHttp::POST(const char* endpoint, char* post_data){
     this->eth_client.println();
     this->eth_client.println(post_data);
     // Serial.println();
-    // Serial.println(post_data);
-    delay(10);
-    this->eth_client.flush();
-    this->eth_client.stop();
+    Serial.println(post_data);
+    delay(110);
     // Serial.println(this->eth_client.read());
     //
-    // while(this->eth_client.connected()){
-    //   while(this->eth_client.available()){
-    //     Serial.write(this->eth_client.read());
-    //   }
-    // }
+    String response = "";
+    while(!this->eth_client.available());
+    while(this->eth_client.available()){
+      response = (this->eth_client.readStringUntil('\r'));
+      }
+    Serial.println(response);
 
-    // Serial.println("Posted sepa");
-    delay(100);
+    this->eth_client.flush();
+    this->eth_client.stop();
+    delay(500);
+
+    if(response.indexOf("200") == -1){
+      return false;
+    }
+
     // Serial.print("post_data: ");
     // Serial.println(post_data);
     return true;
