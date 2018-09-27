@@ -29,22 +29,24 @@ class BaseProtocol {
     public:
         bool send_data();
         void device_identificator();
-        bool register_all(Service, char*, int);
-        bool BaseProtocol::register_service_data(Service, char*, int);
+        bool register_all(int, char*, int);
+        bool BaseProtocol::register_service_data(int, char*, int);
         virtual bool register_device() = 0;
-        virtual bool register_service(Service)= 0;
-        virtual bool register_data(Service, char*, int)= 0;
-        bool send_data(Service , float*, int, int);
-        bool send_data(Service , char*, int);
+        virtual bool register_service(int)= 0;
+        virtual bool register_data(int, char*, int)= 0;
+        bool send_data(int , float*, int, int);
+        bool send_data(int , char*, int);
         char* float_to_char(float*, int);
-        Service create_service(int , const char *, String, bool, String);
+        int create_service(int , const char *, String, bool, String);
         char nibble_to_char(int);
         char *make_client_data(char*);
         char *make_service_data(Service, char*);
         char *make_raw_data(Service, char*, int, char*);
         char *append_json(char*, const char*, const char*, int);
+
     private:
         bool DEVICE_REGISTERED = false;
+
 
     protected:
         byte mac_byte[6] = {0x9A, 'I', 'O', 'T', 0, 0};
@@ -55,6 +57,8 @@ class BaseProtocol {
         String channel = "Ethernet";
         String chipset = "";
         String mac = "";
+        Service service[5];
+        int service_index = 0;
 };
 
 #endif

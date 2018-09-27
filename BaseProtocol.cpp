@@ -1,17 +1,19 @@
 #include "BaseProtocol.h"
 
-Service BaseProtocol::create_service(int number, const char *name, String unit, bool numeric, String parameter){
-  return Service(number, name, unit, numeric, parameter);
+int BaseProtocol::create_service(int number, const char *name, String unit, bool numeric, String parameter){
+  this->service[number] = Service(number, name, unit, numeric, parameter);
+  return this->service[number].number;
+  // return Service(number, name, unit, numeric, parameter);
 }
 
-bool BaseProtocol::send_data(Service service, float *data, int array_size, int sensitive=0) {
+bool BaseProtocol::send_data(int service, float *data, int array_size, int sensitive=0) {
   char * char_data = float_to_char(data, array_size);
 	this->DEVICE_REGISTERED = (!this->DEVICE_REGISTERED)? this->register_all(service, char_data, sensitive) : this->register_service_data(service, char_data, sensitive);
   free(char_data);
   return this->DEVICE_REGISTERED;
 }
 
-bool BaseProtocol::send_data(Service service, char *char_data, int sensitive=0) {
+bool BaseProtocol::send_data(int service, char *char_data, int sensitive=0) {
 	this->DEVICE_REGISTERED = (!this->DEVICE_REGISTERED)? this->register_all(service, char_data, sensitive) : this->register_service_data(service, char_data, sensitive);
   return this->DEVICE_REGISTERED;
 }
@@ -67,18 +69,18 @@ void BaseProtocol::device_identificator(){
 
 }
 
-bool BaseProtocol::register_all(Service service, char *data, int sensitive){
-	return this->register_device() && this->register_service(service) && this->register_data(service, data, sensitive);
+bool BaseProtocol::register_all(int service, char *data, int sensitive){
+	return this->register_device() && this->register_service_data(service, data, sensitive);
 }
 
-bool BaseProtocol::register_service_data(Service service,  char* data, int sensitive){
-  Serial.println(service.registered);
-  if (service.registered){
+bool BaseProtocol::register_service_data(int service,  char* data, int sensitive){
+  Serial.println(this->service[service].registered);
+  if (this->service[service].registered){
     if(this->register_data(service, data, sensitive)){
       return true;
     }
     else{
-      service.registered = false;
+      this->service[service].registered = false;
       return false;
     }
   }
@@ -86,14 +88,14 @@ bool BaseProtocol::register_service_data(Service service,  char* data, int sensi
     Serial.println("Else");
     if(this->register_service(service) && this->register_data(service, data, sensitive)){
       Serial.println("AKI");
-      Serial.println(service.registered);
-      service.registered = true;
-      Serial.println(service.registered);
+      Serial.println(this->service[0].registered);
+      this->service[service].registered = true;
+      Serial.println(this->service[service].registered);
       return true;
     }
     else{
       Serial.println("OIE");
-      service.registered = false;
+      this->service[service].registered = false;
       return false;
     }
   }
@@ -144,7 +146,7 @@ char *BaseProtocol::make_service_data(Service service, char* json){
   json = this->append_json(json, "unit", service.unit.c_str(),0);
   Serial.println(json);
   delay(1000);
-  json = this->append_json(json, "numeric", String(service.numeric).c_str(),service.numeric);
+  json = this->append_json(json, "numeric", String(service.numeric).c_str(),1);
   json[strlen(json)-1] = '}';
   Serial.println(json);
   delay(1000);
@@ -234,12 +236,12 @@ char BaseProtocol::nibble_to_char(int nibble){
   return nibble + 48 + 7*(nibble > 9); //ascii based
 }
 
-bool BaseProtocol::register_service(Service service){
+bool BaseProtocol::register_service(int service){
   return false;
 }
 bool BaseProtocol::register_device(){
   return false;
 }
-bool BaseProtocol::register_data(Service svc, char* dt, int stv){
+bool BaseProtocol::register_data(int svc, char* dt, int stv){
   return false;
 }

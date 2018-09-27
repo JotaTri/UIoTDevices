@@ -46,9 +46,9 @@ bool UHttp::register_device(){
   return result;
 }
 
-bool UHttp::register_service(Service s){
+bool UHttp::register_service(int s){
   char *data = NULL;
-  data = this->make_service_data(s, data);
+  data = this->make_service_data(this->service[s], data);
   // Serial.println(strlen(data));
   bool result = this->POST("/service", data);
   for(int i = 0; i < strlen(data); i++)
@@ -58,9 +58,9 @@ bool UHttp::register_service(Service s){
   return result;
 }
 
-bool UHttp::register_data(Service s, char* value, int sensitive){
+bool UHttp::register_data(int s, char* value, int sensitive){
   char *data = NULL;
-  data = this->make_raw_data(s, value, sensitive, data);
+  data = this->make_raw_data(this->service[s], value, sensitive, data);
 
   // Serial.println(strlen(data));
   bool result = this->POST("/data", data);

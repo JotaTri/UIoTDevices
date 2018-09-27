@@ -16,8 +16,8 @@ class UHttp : public BaseProtocol{
         void init();
         void set_server(const char*);
         bool register_device();
-        bool register_service(Service);
-        bool register_data(Service, char*, int);
+        bool register_service(int);
+        bool register_data(int, char*, int);
         bool POST(const char*, char*);
 
     private:
