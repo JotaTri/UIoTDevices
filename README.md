@@ -1,11 +1,12 @@
-# UIoT Devices - Arduino
+# UIoT Devices
 
-The objective of this library is to enable users to create *Clients* and *Services* that follow UIoT's Ontology of sending and managing message flows in Arduino devices.
+This librarys aim is to enable users to create *Clients* and *Services* that follow UIoT's Ontology of sending and managing message flows in Arduino devices.
 
 All the protocols included as a means of communication in this library follow the same principles:
-* Create a *Device*
-* Create a *Service*
-* Send *Data*
+
+ 1. Create a *Device*
+ 2. Create a *Service*
+ 3. Send *Data*
 
 <!-- The documentation of the Ontology followed by this library can be found at @@link-ontologia -->
 
@@ -30,6 +31,9 @@ The supported protocols by supported are displayed in the following table
   </tr>
   </table>
 
+
+# Arduino
+
 # HTTP
 
   The HTTP library depends on the following libraries:
@@ -38,6 +42,7 @@ The supported protocols by supported are displayed in the following table
   * EEPROM.h
   * Ethernet.h
 
+  <!-- TODO identificar nome do Ethernet shield -->
   So, they must be installed in the users environment. The Ethernet library was used and tested to the @@nome-do-shield Ethernet Shield.
 
   ## Creating a Device
@@ -64,6 +69,7 @@ The supported protocols by supported are displayed in the following table
   (...)
   device.create_service(number, name, unit, numeric, parameter);
   ```
+
   ## Sending Data
 
   To send data to the specified server, you must use the [*UHttp.send_data*](#send_data) method as demonstrated below
@@ -77,22 +83,53 @@ The supported protocols by supported are displayed in the following table
 
 ### create_service
 
+```c++
+void UHttp::set_server(const char *server)
+```
+
+| Parameter | Type | Description | Obligatory |
+|-|-|-|-|
+| server | char* | array of characters that contains the servers domain or IP[1] | :heavy_check_mark:
+
+[1]The servers port is set to 8000 byt default, to change it you must define your a variable called *HTTP_PORT* in your code.
+
+### create_service
+
+```c++
+int BaseProtocol::create_service(int number, const char *name, String unit, bool numeric, String parameter)
+```
+
+| Parameter | Type | Description | Obligatory |
+|-|-|-|-|
+| number | int | Number to be attributed to the Service object that is beeing created | :heavy_check_mark:
+| name | char* | Array of characters that mounts the name of the Service object that is beein created| :heavy_check_mark:
+| unit | String | String that contais the unit of the value that is produced by the Service object that is beeing createed | :heavy_check_mark:
+| numeric | bool | Value that indicates if the data produced by the service is of a numeric type or not | :heavy_check_mark:
+| parameter | String | Value that indicates the parameters of the Service object that is beeing created | :heavy_check_mark:
+
+
 ### send_data
 
 ```c++
     bool BaseProtocol::send_data(Service service, float *data, int array_size, int sensitive=0)
 ```
 
+| Parameter | Type | Description | Obligatory |
+|-|-|-|-|
+| service | Service | Service object with the *services* characteristics | :heavy_check_mark:
+| data | float* | Array of float values corresponding to the data produced from the service| :heavy_check_mark:
+| array_size | int | number of values in the data array | :heavy_check_mark:
+| sensitive | int | value that indicates if the data is sensitive or not, that is, if the data must bypass the gateways buffer (default value is 0 - not sensitive)| :x:
 
 
 ```c++
     bool BaseProtocol::send_data(Service service, char *char_data, int sensitive=0)
 ```
 
-
 | Parameter | Type | Description | Obligatory |
 |-|-|-|-|
 | service | Service | Service object with the *services* characteristics | :heavy_check_mark:
-| data | float* | Array of float values corresponding to the data collected from the service| :heavy_check_mark:
-| array_size | int | number of values in the data array | :heavy_check_mark:
+| char_data | float* | Array of characters with the value corresponding to the data produced from the service| :heavy_check_mark:
 | sensitive | int | value that indicates if the data is sensitive or not, that is, if the data must bypass the gateways buffer (default value is 0 - not sensitive)| :x:
+
+<!-- TODO# Serial -->
