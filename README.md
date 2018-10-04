@@ -60,7 +60,7 @@ The supported protocols by supported are displayed in the following table
   ```
 
 
-  ## Creating a Service
+## Creating a Service
 
   A *Service* in an object of the Service class that represents a task witch a *Device* has.
 
@@ -72,22 +72,24 @@ The supported protocols by supported are displayed in the following table
   device.create_service(number, name, unit, numeric, parameter);
   ```
 
-  ## Sending Data
+## Sending Data
 
   To send data to the specified server, you must use the [*UHttp.send_data*](#send_data) method as demonstrated below
 
   ```c++
     device.send_data(service1, ptr , tam, 0);
-    ```
+  ```
 
 
 ## Methods
 
 ### create_service
 
+
 ```c++
 void UHttp::set_server(const char *server)
 ```
+
 
 | Parameter | Type | Description | Obligatory |
 |-|-|-|-|
