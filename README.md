@@ -51,12 +51,14 @@ The supported protocols by supported are displayed in the following table
 
   To create a device using UHttp library you must create an instance of it, initialize it and, finally, set a server to send data to, as demonstrated below
 
-  >```c++
+
+  ```c++
   UHttp device;
   (...)
   device.init();
   device.set_server(SERVER_STRING);
   ```
+
 
   ## Creating a Service
 
@@ -64,7 +66,7 @@ The supported protocols by supported are displayed in the following table
 
   To create a service using UHttp library you must create an instance of it and set a value from the [*UHttp.create_service*](#create_service) method as demonstrated below
 
-  >```c++
+  ```c++
   Service service1;
   (...)
   device.create_service(number, name, unit, numeric, parameter);
@@ -74,7 +76,7 @@ The supported protocols by supported are displayed in the following table
 
   To send data to the specified server, you must use the [*UHttp.send_data*](#send_data) method as demonstrated below
 
-  >```c++
+  ```c++
     device.send_data(service1, ptr , tam, 0);
     ```
 
