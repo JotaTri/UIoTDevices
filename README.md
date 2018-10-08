@@ -11,7 +11,7 @@ All the protocols included as a means of communication in this library follow th
 <!-- The documentation of the Ontology followed by this library can be found at @@link-ontologia -->
 
 
-The supported protocols by supported are displayed in the following table  
+The supported protocols by supported devices are displayed in the following table  
 
 <table>
 <tr>
@@ -42,8 +42,7 @@ The supported protocols by supported are displayed in the following table
   * EEPROM.h
   * Ethernet.h
 
-  <!-- TODO identificar nome do Ethernet shield -->
-  So, they must be installed in the users environment. The Ethernet library was used and tested to the @@nome-do-shield Ethernet Shield.
+  So, they must be installed in the users environment. The Ethernet library was used and tested to the WizNet 5100 Ethernet Shield.
 
   ## Creating a Device
 
