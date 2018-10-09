@@ -30,7 +30,7 @@ class BaseProtocol {
         bool send_data();
         void device_identificator();
         bool register_all(int, char*, int);
-        bool BaseProtocol::register_service_data(int, char*, int);
+        bool register_service_data(int, char*, int);
         virtual bool register_device() = 0;
         virtual bool register_service(int)= 0;
         virtual bool register_data(int, char*, int)= 0;
