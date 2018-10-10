@@ -11,7 +11,7 @@ All the protocols included as a means of communication in this library follow th
 <!-- The documentation of the Ontology followed by this library can be found at @@link-ontologia -->
 
 
-The supported protocols by supported devices are displayed in the following table  
+The supported protocols by supported devices are displayed in the following table.
 
 <table>
 <tr>
@@ -31,6 +31,7 @@ The supported protocols by supported devices are displayed in the following tabl
   </tr>
   </table>
 
+Examples can also be found in the table above, with a full code that uses the corresponding library. All examples can be found int the examples folder.
 
 # Arduino
 
@@ -38,7 +39,6 @@ The supported protocols by supported devices are displayed in the following tabl
 
   The HTTP library depends on the following libraries:
 
-  <!-- * PubSubClient.h -->
   * EEPROM.h
   * Ethernet.h
 
