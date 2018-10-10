@@ -82,7 +82,7 @@ The supported protocols by supported devices are displayed in the following tabl
 
 ## Methods
 
-### create_service
+### set_server
 
 
 ```c++
