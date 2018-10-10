@@ -3,7 +3,6 @@
 int BaseProtocol::create_service(int number, const char *name, String unit, bool numeric, String parameter){
   this->service[number] = Service(number, name, unit, numeric, parameter);
   return this->service[number].number;
-  // return Service(number, name, unit, numeric, parameter);
 }
 
 bool BaseProtocol::send_data(int service, float *data, int array_size, int sensitive=0) {
@@ -61,12 +60,6 @@ void BaseProtocol::device_identificator(){
     this->mac += ":";
   }
   this->mac.remove(this->mac.length()-1,1);
-  // Serial.print("MAC: ");
-  // Serial.println(this->mac);
-  //
-  // Serial.print("CHIPSET: ");
-  // Serial.println(this->chipset);
-
 }
 
 bool BaseProtocol::register_all(int service, char *data, int sensitive){
@@ -103,9 +96,6 @@ bool BaseProtocol::register_service_data(int service,  char* data, int sensitive
 
 
 char *BaseProtocol::make_client_data(char* json){
-  // Serial.println("Registering Device");
-
-  // Serial.println(strlen(json));
   json = (char*)malloc(2*sizeof(char));
   json[0] = '{';
   json[1] = '\0';
@@ -116,15 +106,12 @@ char *BaseProtocol::make_client_data(char* json){
   json = this->append_json(json, "processor", this->processor.c_str(),0);
   json = this->append_json(json, "channel", this->channel.c_str(),0);
   json[strlen(json)-1] = '}';
-  // Serial.println(json);
   return json;
 }
 
 
 char *BaseProtocol::make_service_data(Service service, char* json){
-  // Serial.println("Registering Service");
 
-  // Serial.println(strlen(json));
   json = (char*)malloc(2*sizeof(char));
   json[0] = '{';
   json[1] = '\0';
@@ -154,8 +141,6 @@ char *BaseProtocol::make_service_data(Service service, char* json){
 }
 
 char *BaseProtocol::make_raw_data(Service s, char *data, int sensitive, char* json){
-  // Serial.println("Raw Data");
-  // Serial.println(strlen(json));
   json = (char*)malloc(2*sizeof(char));
   json[0] = '{';
   json[1] = '\0';
@@ -165,15 +150,12 @@ char *BaseProtocol::make_raw_data(Service s, char *data, int sensitive, char* js
   json = this->append_json(json, "serviceNumber", String(s.number).c_str(),1);
   json = this->append_json(json, "values", data, s.numeric);
   json[strlen(json)-1] = '}';
-  // Serial.println(json);
   return json;
 }
 
 
 char* BaseProtocol::append_json(char *json, const char* key, const char* value, int numeric){
-  // Serial.println(strlen(json));
   if(key == "values" && !numeric){
-    json = (char*) realloc (json, (strlen(key) + strlen(value) + 9 + strlen(json)) * sizeof(char)); // 9 because "" and : and ,
     strcat(json, "\"");
     strcat(json, key);
     strcat(json, "\":[\"");

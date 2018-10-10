@@ -29,8 +29,4 @@ class UHttp : public BaseProtocol{
 
 };
 
-
-
-
-
 #endif
