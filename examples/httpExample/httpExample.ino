@@ -2,7 +2,7 @@
 
 
 UHttp device;
-Service service1;
+int service1;
 int tam = 10;
 
 void setup(){
